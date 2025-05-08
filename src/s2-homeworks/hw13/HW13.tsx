@@ -32,12 +32,12 @@ const HW13 = () => {
             .then((res) => {
                 setCode('Код 200!');
                 setImage(success200);
-                setText('...всё ок');
+                setText('всё OK)');
                 setInfo('код 200 - обычно означает что скорее всего всё ок)');
                 setIsLoading(false);
             })
             .catch((e) => {
-                if (axios.isAxiosError(e) && e.response) {
+                if (axios.isAxiosError(e) && e.response && e.response.status) {
                     if (e.response.status === 400) {
                         setCode('Ошибка 400!');
                         setImage(error400);
@@ -54,10 +54,12 @@ const HW13 = () => {
                         );
                     }
                 } else {
+                    console.log('Network error states set');
                     setCode('Error!');
                     setImage(errorUnknown);
                     setText('Network Error');
                     setInfo('AxiosError');
+                    console.log('States set:', { code: 'Error!', image: errorUnknown, text: 'Network Error', info: 'AxiosError' });
                 }
                 setIsLoading(false);
             });
@@ -103,23 +105,25 @@ const HW13 = () => {
                     </SuperButton>
                 </div>
 
-                <div className={`${s.responseContainer} ${code === 'Код 200!' ? s.success : code ? s.error : ''}`}>
-                    <div className={s.imageContainer}>
-                        {image ? <img src={image} className={s.image} alt="status" /> : <div>No image</div>}
-                    </div>
+                {(code || text || info || image) && (
+                    <div className={`${s.responseContainer} ${code === 'Код 200!' ? s.success : code ? s.error : ''}`}>
+                        <div className={s.imageContainer}>
+                            {image && <img src={image} className={s.image} alt="status" />}
+                        </div>
 
-                    <div className={s.textContainer}>
-                        <div id={'hw13-code'} className={s.code}>
-                            {code || 'No code'}
-                        </div>
-                        <div id={'hw13-text'} className={s.text}>
-                            {text || 'No text'}
-                        </div>
-                        <div id={'hw13-info'} className={s.info}>
-                            {info}
+                        <div className={s.textContainer}>
+                            <div id={'hw13-code'} className={s.code}>
+                                {code}
+                            </div>
+                            <div id={'hw13-text'} className={s.text}>
+                                {text}
+                            </div>
+                            <div id={'hw13-info'} className={s.info}>
+                                {info}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
