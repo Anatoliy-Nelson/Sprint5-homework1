@@ -32,51 +32,32 @@ const HW13 = () => {
             .then((res) => {
                 setCode('Код 200!');
                 setImage(success200);
-                setText('всё OK)');
+                setText('...всё ок');
                 setInfo('код 200 - обычно означает что скорее всего всё ок)');
                 setIsLoading(false);
             })
             .catch((e) => {
-                console.log('Error caught:', e);
-                console.log('Is AxiosError:', axios.isAxiosError(e));
-                if (axios.isAxiosError(e)) {
-                    console.log('Response:', e.response);
-                    console.log('Error code:', e.code);
-                    if (e.response && e.response.status) {
-                        if (e.response.status === 400) {
-                            setCode('Ошибка 400!');
-                            setImage(error400);
-                            setText('Ты не отправил success в body вообще!');
-                            setInfo(
-                                'ошибка 400 - обычно означает что скорее всего фронт отправил что-то не то на бэк!'
-                            );
-                        } else if (e.response.status === 500) {
-                            setCode('Ошибка 500!');
-                            setImage(error500);
-                            setText('эмитация ошибки на сервере');
-                            setInfo(
-                                'ошибка 500 - обычно означает что что-то сломалось на сервере, например база данных)'
-                            );
-                        }
-                    } else if (e.code === 'ERR_NETWORK') {
-                        console.log('Setting network error states');
-                        setCode('Error!');
-                        setImage(errorUnknown);
-                        setText('Network Error');
-                        setInfo('AxiosError');
-                    } else {
-                        console.log('Other Axios error');
-                        setCode('Error!');
-                        setImage(errorUnknown);
-                        setText('Unknown Axios Error');
-                        setInfo('Произошла неизвестная ошибка Axios');
+                if (axios.isAxiosError(e) && e.response) {
+                    if (e.response.status === 400) {
+                        setCode('Ошибка 400!');
+                        setImage(error400);
+                        setText('Ты не отправил success в body вообще!');
+                        setInfo(
+                            'ошибка 400 - обычно означает что скорее всего фронт отправил что-то не то на бэк!'
+                        );
+                    } else if (e.response.status === 500) {
+                        setCode('Ошибка 500!');
+                        setImage(error500);
+                        setText('эмитация ошибки на сервере');
+                        setInfo(
+                            'ошибка 500 - обычно означает что что-то сломалось на сервере, например база данных)'
+                        );
                     }
                 } else {
-                    console.log('Non-Axios error');
                     setCode('Error!');
                     setImage(errorUnknown);
-                    setText('Unknown Error');
-                    setInfo('Произошла неизвестная ошибка');
+                    setText('Network Error');
+                    setInfo('AxiosError');
                 }
                 setIsLoading(false);
             });
